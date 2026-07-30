@@ -65,9 +65,6 @@ jobs:
       contents: read
       packages: write
 
-    env:
-      TEST_ENV: test-env
-
     steps:
 
       # https://github.com/actions/checkout
@@ -337,6 +334,9 @@ jobs:
       contents: read
       packages: write
 
+    env:
+      TEST_ENV: test-env
+
     steps:
 
       # https://github.com/actions/checkout
@@ -405,19 +405,17 @@ jobs:
         run: |
             echo "TEST_ENV [${TEST_ENV}]"
             echo "TEST_VAR [${TEST_VAR}]"
-            echo "HARBOR_REGISTRY [${HARBOR_REGISTRY}]"
-            echo "HARBOR_USERNAME [${HARBOR_USERNAME}]"
-            echo "UKSRC_REPO_USERNAME [${UKSRC_REPO_USERNAME}]"
+            echo "TEST_SECRET [${TEST_SECRET}]"
         env:
           TEST_ENV: ${{env.TEST_ENV}}
           TEST_VAR: ${{vars.TEST_VAR}}
-          HARBOR_REGISTRY: ${{vars.HARBOR_REGISTRY}}
-          HARBOR_USERNAME: ${{secrets.HARBOR_USERNAME}}
-          UKSRC_REPO_USERNAME: ${{ secrets.UKSRC_REPO_USERNAME }}
+          TEST_VAR: ${{secrets.TEST_SECRET}}
 
       - name: Publish the JAR to the UKSRC Nexus repository.
         if: >
-            github.repository == 'uksrc/Calycopis-openapi'
+            github.repository == 'uksrc/Calycopis-openapi' &&
+            github.event_name == 'push' &&
+            github.ref_name == 'main'
         working-directory: codegen/java/spring
         run: |
           ./mvnw \
