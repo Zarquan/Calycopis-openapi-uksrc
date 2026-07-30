@@ -409,6 +409,7 @@ jobs:
             echo "HARBOR_USERNAME [${HARBOR_USERNAME}]"
             echo "UKSRC_REPO_USERNAME [${UKSRC_REPO_USERNAME}]"
         env:
+          TEST_ENV: ${{env.TEST_ENV}}
           TEST_VAR: ${{vars.TEST_VAR}}
           HARBOR_REGISTRY: ${{vars.HARBOR_REGISTRY}}
           HARBOR_USERNAME: ${{secrets.HARBOR_USERNAME}}
