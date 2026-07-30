@@ -398,6 +398,19 @@ jobs:
         run: |
             cat ~/.m2/settings.xml
 
+      - name: Check our environment variables
+        run: |
+            echo "HARBOR_REGISTRY [${HARBOR_REGISTRY}]"
+            echo "HARBOR_USERNAME [${HARBOR_USERNAME}]"
+            echo "HARBOR_PASSWORD [${HARBOR_PASSWORD}]"
+            echo "UKSRC_REPO_USERNAME [${UKSRC_REPO_USERNAME}]"
+            echo "UKSRC_REPO_PASSWORD [${UKSRC_REPO_PASSWORD}]"
+        env:
+          HARBOR_USERNAME: ${{secrets.HARBOR_USERNAME}}
+          HARBOR_PASSWORD: ${{secrets.HARBOR_PASSWORD}}
+          UKSRC_REPO_USERNAME: ${{ secrets.UKSRC_REPO_USERNAME }}
+          UKSRC_REPO_PASSWORD: ${{ secrets.UKSRC_REPO_PASSWORD }}
+
       - name: Publish the JAR to the UKSRC Nexus repository.
         if: >
             github.repository == 'uksrc/Calycopis-openapi' &&
