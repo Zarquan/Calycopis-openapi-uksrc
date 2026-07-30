@@ -45,7 +45,7 @@
 # A GitHub workflow to build and publish libraries from the schema.
 #
 
-name: Calycopis OpenAPI code generator
+name: Calycopis OpenAPI packages
 
 on:
   push:
@@ -334,6 +334,9 @@ jobs:
       contents: read
       packages: write
 
+    env:
+      TEST_ENV: test-env
+
     steps:
 
       # https://github.com/actions/checkout
@@ -397,6 +400,16 @@ jobs:
       - name: Check our Maven settings
         run: |
             cat ~/.m2/settings.xml
+
+      - name: Check our environment variables
+        run: |
+            echo "TEST_ENV [${TEST_ENV}]"
+            echo "TEST_VAR [${TEST_VAR}]"
+            echo "TEST_SECRET [${TEST_SECRET}]"
+        env:
+          TEST_ENV: ${{env.TEST_ENV}}
+          TEST_VAR: ${{vars.TEST_VAR}}
+          TEST_SECRET: ${{secrets.TEST_SECRET}}
 
       - name: Publish the JAR to the UKSRC Nexus repository.
         if: >

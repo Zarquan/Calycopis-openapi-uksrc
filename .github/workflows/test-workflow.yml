@@ -1,0 +1,72 @@
+#
+# <meta:header>
+#   <meta:licence>
+#     Copyright (c) 2026, Manchester University (http://www.manchester.ac.uk/)
+#
+#     This work is made available under the Creative Commons
+#     Attribution-ShareAlike 4.0 International licence.
+#
+#     For details of the licence terms see:
+#     https://creativecommons.org/licenses/by-sa/4.0/
+#   </meta:licence>
+# </meta:header>
+#
+# AIMetrics: []
+#
+#
+
+name: Calycopis test workflow
+
+on:
+  push:
+    branches:
+      - 'main'
+
+  pull_request:
+
+  workflow_dispatch:
+
+jobs:
+
+  test-job:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    env:
+      TEST_ENV: test-env
+
+    steps:
+
+      # https://github.com/actions/checkout
+      - name: Checkout the schema project
+        uses: actions/checkout@v7
+        with:
+          submodules: 'true'
+
+      - name: Check the value of GITHUB_ENV.
+        shell: bash
+        run: |
+          echo "${GITHUB_ENV}"
+
+      - name: Check the contents of GITHUB_ENV.
+        shell: bash
+        run: |
+          cat "${GITHUB_ENV}"
+
+      - name: Check our environment variables
+        shell: bash
+        run: |
+            echo "TEST_ENV [${TEST_ENV}]"
+            echo "TEST_VAR [${TEST_VAR}]"
+            echo "TEST_SECRET [${TEST_SECRET}]"
+            echo "GITHUB_TOKEN [${GITHUB_TOKEN}]"
+        env:
+          TEST_ENV: ${{env.TEST_ENV}}
+          TEST_VAR: ${{vars.TEST_VAR}}
+          TEST_SECRET: ${{secrets.TEST_SECRET}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
