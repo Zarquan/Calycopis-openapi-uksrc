@@ -45,7 +45,7 @@
 # A GitHub workflow to build and publish libraries from the schema.
 #
 
-name: Calycopis OpenAPI code generator
+name: Calycopis OpenAPI packages
 
 on:
   push:
