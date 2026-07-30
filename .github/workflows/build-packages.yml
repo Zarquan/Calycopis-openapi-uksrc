@@ -409,7 +409,7 @@ jobs:
         env:
           TEST_ENV: ${{env.TEST_ENV}}
           TEST_VAR: ${{vars.TEST_VAR}}
-          TEST_VAR: ${{secrets.TEST_SECRET}}
+          TEST_SECRET: ${{secrets.TEST_SECRET}}
 
       - name: Publish the JAR to the UKSRC Nexus repository.
         if: >
