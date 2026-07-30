@@ -65,6 +65,12 @@ jobs:
       contents: read
       packages: write
 
+    env:
+      TEST_ENV: test-env
+
+    vars:
+      TEST_VAR: test-var
+
     steps:
 
       # https://github.com/actions/checkout
@@ -400,18 +406,16 @@ jobs:
 
       - name: Check our environment variables
         run: |
-            echo "TEST_USERNAME [${TEST_USERNAME}]"
+            echo "TEST_ENV [${TEST_ENV}]"
+            echo "TEST_VAR [${TEST_VAR}]"
             echo "HARBOR_REGISTRY [${HARBOR_REGISTRY}]"
             echo "HARBOR_USERNAME [${HARBOR_USERNAME}]"
-            echo "HARBOR_PASSWORD [${HARBOR_PASSWORD}]"
             echo "UKSRC_REPO_USERNAME [${UKSRC_REPO_USERNAME}]"
-            echo "UKSRC_REPO_PASSWORD [${UKSRC_REPO_PASSWORD}]"
         env:
-          TEST_USERNAME: 'test-username'
+          TEST_VAR: ${{vars.TEST_VAR}}
+          HARBOR_REGISTRY: ${{vars.HARBOR_REGISTRY}}
           HARBOR_USERNAME: ${{secrets.HARBOR_USERNAME}}
-          HARBOR_PASSWORD: ${{secrets.HARBOR_PASSWORD}}
           UKSRC_REPO_USERNAME: ${{ secrets.UKSRC_REPO_USERNAME }}
-          UKSRC_REPO_PASSWORD: ${{ secrets.UKSRC_REPO_PASSWORD }}
 
       - name: Publish the JAR to the UKSRC Nexus repository.
         if: >
