@@ -65,6 +65,7 @@ jobs:
             echo "HARBOR_REGISTRY [${HARBOR_REGISTRY}]"
             echo "HARBOR_USERNAME [${HARBOR_USERNAME}]"
             echo "UKSRC_REPO_USERNAME [${UKSRC_REPO_USERNAME}]"
+            echo "GITHUB_TOKEN [${GITHUB_TOKEN}]"
         env:
           TEST_ENV: ${{env.TEST_ENV}}
           TEST_VAR: ${{vars.TEST_VAR}}
