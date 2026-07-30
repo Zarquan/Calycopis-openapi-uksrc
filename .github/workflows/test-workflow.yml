@@ -61,12 +61,14 @@ jobs:
         run: |
             echo "TEST_ENV [${TEST_ENV}]"
             echo "TEST_VAR [${TEST_VAR}]"
+            echo "TEST_SECRET [${TEST_SECRET}]"
             echo "HARBOR_REGISTRY [${HARBOR_REGISTRY}]"
             echo "HARBOR_USERNAME [${HARBOR_USERNAME}]"
             echo "UKSRC_REPO_USERNAME [${UKSRC_REPO_USERNAME}]"
         env:
           TEST_ENV: ${{env.TEST_ENV}}
           TEST_VAR: ${{vars.TEST_VAR}}
+          TEST_SECRET: ${{secrets.TEST_SECRET}}
           HARBOR_REGISTRY: ${{vars.HARBOR_REGISTRY}}
           HARBOR_USERNAME: ${{secrets.HARBOR_USERNAME}}
           UKSRC_REPO_USERNAME: ${{ secrets.UKSRC_REPO_USERNAME }}
