@@ -28,12 +28,15 @@ on:
 
 jobs:
 
-  build-java-spring:
+  test-job:
 
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
+
+    env:
+      TEST_ENV: test-env
 
     steps:
 
