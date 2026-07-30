@@ -68,9 +68,6 @@ jobs:
     env:
       TEST_ENV: test-env
 
-    vars:
-      TEST_VAR: test-var
-
     steps:
 
       # https://github.com/actions/checkout
