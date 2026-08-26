@@ -36,6 +36,16 @@
 #       "value": 5,
 #       "units": "%"
 #       }
+#     },
+#     {
+#     "timestamp": "2026-08-26T12:21:45",
+#     "name": "Cursor CLI",
+#     "version": "2026.02.13-41ac335",
+#     "model": "Claude 4.6 Opus (Thinking)",
+#     "contribution": {
+#       "value": 1,
+#       "units": "%"
+#       }
 #     }
 #   ]
 #
@@ -59,7 +69,7 @@ from calycopis_openapi_client.models import (
 
 class ExecutionBrokerClient:
     """
-    High-level convenience wrapper around the generated calycopis_schema_client.
+    High-level convenience wrapper around the generated calycopis_openapi_client.
 
     This focuses on the common testing flows:
     - submitting an execution offer-set request
