@@ -3,4 +3,5 @@ build.properties
 .classpath
 .project
 .settings
+__pycache__/
 

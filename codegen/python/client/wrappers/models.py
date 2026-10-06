@@ -28,6 +28,16 @@
 #       "value": 100,
 #       "units": "%"
 #       }
+#     },
+#     {
+#     "timestamp": "2026-08-26T12:21:45",
+#     "name": "Cursor CLI",
+#     "version": "2026.02.13-41ac335",
+#     "model": "Claude 4.6 Opus (Thinking)",
+#     "contribution": {
+#       "value": 1,
+#       "units": "%"
+#       }
 #     }
 #   ]
 #
@@ -39,7 +49,7 @@ values matching the OpenAPI schema discriminator URIs.
 Import these instead of the generated classes when constructing request
 objects, so you don't need to pass the ``kind`` argument manually::
 
-    from calycopis_schema_client.wrappers import DockerContainer
+    from calycopis_openapi_client.wrappers import DockerContainer
 
     executable = DockerContainer(
         image=DockerImageSpec(locations=["my-image:latest"]),

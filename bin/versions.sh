@@ -19,48 +19,39 @@
 
 configfile=${1:?}
 
-schemashort=$(
-    yq '.schema.path' "${configfile:?}"
+CALYCOPIS_OPENAPI_SCHEMA_VERSION=$(
+    yq '.openapi.schema.version' "${configfile:?}"
     )
 
-schemaversion=$(
-    yq '.schema.version' "${configfile:?}"
+CALYCOPIS_OPENAPI_SCHEMA_PATH=$(
+    yq '.openapi.schema.path' "${configfile:?}"
     )
 
-combinedschema="execution-broker-${schemaversion:?}.yaml"
-
-pythonversion="${schemaversion:?}"
-
-pythonbuild=$(
-    yq '.python.build // ""' "${configfile}"
+CALYCOPIS_OPENAPI_SPRING_VERSION=$(
+    yq '.openapi.spring.version' "${configfile:?}"
     )
 
-if [ -n "${pythonbuild}" ]
-then
-    pythonversion="${pythonversion:?}.${pythonbuild:?}"
-fi
-
-javaversion="${schemaversion:?}"
-
-javabuild=$(
-    yq '.java.build // ""' "${configfile:?}"
+CALYCOPIS_OPENAPI_PYTHON_VERSION=$(
+    yq '.openapi.python.version' "${configfile:?}"
     )
 
-if [ -n "${javabuild}" ]
-then
-    javaversion="${javaversion:?}-${javabuild:?}"
-fi
+CALYCOPIS_OPENAPI_SCHEMA_FILE="execution-broker-${CALYCOPIS_OPENAPI_SCHEMA_VERSION:?}.yaml"
+
+export CALYCOPIS_OPENAPI_SCHEMA_VERSION
+export CALYCOPIS_OPENAPI_SCHEMA_PATH
+export CALYCOPIS_OPENAPI_SPRING_VERSION
+export CALYCOPIS_OPENAPI_PYTHON_VERSION
+export CALYCOPIS_OPENAPI_SCHEMA_FILE
 
 #
 # Update GitHub environment variables.
 if [ -n "${GITHUB_ENV}" ]
 then
 cat >> "${GITHUB_ENV}" << EOF
-schemashort=${schemashort}
-schemaversion=${schemaversion}
-combinedschema=${combinedschema}
-javaversion=${javaversion}
-pythonversion=${pythonversion}
+CALYCOPIS_OPENAPI_SCHEMA_VERSION=${CALYCOPIS_OPENAPI_SCHEMA_VERSION}
+CALYCOPIS_OPENAPI_SCHEMA_PATH=${CALYCOPIS_OPENAPI_SCHEMA_PATH}
+CALYCOPIS_OPENAPI_SPRING_VERSION=${CALYCOPIS_OPENAPI_SPRING_VERSION}
+CALYCOPIS_OPENAPI_PYTHON_VERSION=${CALYCOPIS_OPENAPI_PYTHON_VERSION}
+CALYCOPIS_OPENAPI_SCHEMA_FILE=${CALYCOPIS_OPENAPI_SCHEMA_FILE}
 EOF
 fi
-

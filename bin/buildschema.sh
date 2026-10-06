@@ -29,7 +29,7 @@ source "${basepath}/bin/versions.sh" "${basepath}/config.yaml"
 
 python \
     "${basepath}/isobeon/schema-processor.py" \
-        "${basepath}/schema/${schemashort:?}/execution-broker.yaml" \
-        "/tmp/${combinedschema:?}"
+        "${basepath}/schema/${CALYCOPIS_OPENAPI_SCHEMA_PATH:?}/execution-broker.yaml" \
+        "/tmp/${CALYCOPIS_OPENAPI_SCHEMA_FILE:?}"
 
 

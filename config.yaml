@@ -16,14 +16,14 @@
 # Project properties for the build process.
 #
 
+openapi:
+  schema:
+    path: "v1.0"
+    version: "1.0.7"
 
-schema:
-  path: "v1.0"
-  version: "1.0.7"
+  python:
+    version: "1.0.7.dev6"
 
-python:
-  build: "dev5"
-
-java:
-  build: "SNAPSHOT"
+  spring:
+    version: "1.0.7-SNAPSHOT"
 
