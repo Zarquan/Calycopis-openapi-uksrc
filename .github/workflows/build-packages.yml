@@ -78,6 +78,14 @@ jobs:
             bin/versions.sh config.yaml
         shell: bash
 
+      - name: Check the build versions
+        run: |
+            echo "CALYCOPIS_OPENAPI_SCHEMA_VERSION [${{env.CALYCOPIS_OPENAPI_SCHEMA_VERSION}}]"
+            echo "CALYCOPIS_OPENAPI_SCHEMA_PATH [${{env.CALYCOPIS_OPENAPI_SCHEMA_PATH}}]"
+            echo "CALYCOPIS_OPENAPI_SPRING_VERSION [${{env.CALYCOPIS_OPENAPI_SPRING_VERSION}}]"
+            echo "CALYCOPIS_OPENAPI_PYTHON_VERSION [${{env.CALYCOPIS_OPENAPI_PYTHON_VERSION}}]"
+            echo "CALYCOPIS_OPENAPI_SCHEMA_FILE [${{env.CALYCOPIS_OPENAPI_SCHEMA_FILE}}]"
+
       - name: Check the contents of GITHUB_ENV.
         run: |
           cat "${GITHUB_ENV}"
@@ -99,22 +107,22 @@ jobs:
         run: |
           python \
             isobeon/schema-processor.py \
-              'schema/${{env.schemashort}}/execution-broker.yaml' \
-              '/tmp/${{env.combinedschema}}'
+              'schema/${{env.CALYCOPIS_OPENAPI_SCHEMA_PATH}}/execution-broker.yaml' \
+              '/tmp/${{env.CALYCOPIS_OPENAPI_SCHEMA_FILE}}'
 
       - name: Check the result
         run: |
-          head '/tmp/${{env.combinedschema}}'
+          head '/tmp/${{env.CALYCOPIS_OPENAPI_SCHEMA_FILE}}'
 
       - name: Check the result
         run: |
-          tail '/tmp/${{env.combinedschema}}'
+          tail '/tmp/${{env.CALYCOPIS_OPENAPI_SCHEMA_FILE}}'
 
       - name: Upload the schema file as a GitHub artifact
         uses: actions/upload-artifact@v7
         with:
           name: 'calycopis-openapi-combined-schema'
-          path: '/tmp/${{env.combinedschema}}'
+          path: '/tmp/${{env.CALYCOPIS_OPENAPI_SCHEMA_FILE}}'
 
   build-python-client:
 
@@ -144,6 +152,14 @@ jobs:
             bin/versions.sh config.yaml
         shell: bash
 
+      - name: Check the build versions
+        run: |
+            echo "CALYCOPIS_OPENAPI_SCHEMA_VERSION [${{env.CALYCOPIS_OPENAPI_SCHEMA_VERSION}}]"
+            echo "CALYCOPIS_OPENAPI_SCHEMA_PATH [${{env.CALYCOPIS_OPENAPI_SCHEMA_PATH}}]"
+            echo "CALYCOPIS_OPENAPI_SPRING_VERSION [${{env.CALYCOPIS_OPENAPI_SPRING_VERSION}}]"
+            echo "CALYCOPIS_OPENAPI_PYTHON_VERSION [${{env.CALYCOPIS_OPENAPI_PYTHON_VERSION}}]"
+            echo "CALYCOPIS_OPENAPI_SCHEMA_FILE [${{env.CALYCOPIS_OPENAPI_SCHEMA_FILE}}]"
+
       - name: Check the contents of GITHUB_ENV.
         run: |
           cat "${GITHUB_ENV}"
@@ -170,8 +186,8 @@ jobs:
           ./mvnw \
             --batch-mode \
             clean generate-sources \
-              -Drevision=${{env.pythonversion}} \
-              -Dcalycopis.schema.file=/tmp/${{env.combinedschema}}
+              -Drevision=${{env.CALYCOPIS_OPENAPI_PYTHON_VERSION}} \
+              -Dcalycopis.schema.file=/tmp/${{env.CALYCOPIS_OPENAPI_SCHEMA_FILE}}
 
       - name: Add our wrapper classes
         working-directory: codegen/python/client
@@ -203,7 +219,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: 'calycopis-openapi-python-client'
-          path: 'codegen/python/client/target/dist/calycopis_openapi_client-${{env.pythonversion}}-py3-none-any.whl'
+          path: 'codegen/python/client/target/dist/calycopis_openapi_client-${{env.CALYCOPIS_OPENAPI_PYTHON_VERSION}}-py3-none-any.whl'
 
       - name: Publish the wheel to the UKSRC Nexus
         if: >
@@ -247,6 +263,14 @@ jobs:
             bin/versions.sh config.yaml
         shell: bash
 
+      - name: Check the build versions
+        run: |
+            echo "CALYCOPIS_OPENAPI_SCHEMA_VERSION [${{env.CALYCOPIS_OPENAPI_SCHEMA_VERSION}}]"
+            echo "CALYCOPIS_OPENAPI_SCHEMA_PATH [${{env.CALYCOPIS_OPENAPI_SCHEMA_PATH}}]"
+            echo "CALYCOPIS_OPENAPI_SPRING_VERSION [${{env.CALYCOPIS_OPENAPI_SPRING_VERSION}}]"
+            echo "CALYCOPIS_OPENAPI_PYTHON_VERSION [${{env.CALYCOPIS_OPENAPI_PYTHON_VERSION}}]"
+            echo "CALYCOPIS_OPENAPI_SCHEMA_FILE [${{env.CALYCOPIS_OPENAPI_SCHEMA_FILE}}]"
+
       - name: Check the contents of GITHUB_ENV.
         run: |
           cat "${GITHUB_ENV}"
@@ -273,14 +297,14 @@ jobs:
           ./mvnw \
             --batch-mode \
             clean install \
-              -Drevision=${{env.javaversion}} \
-              -Dcalycopis.schema.file=/tmp/${{env.combinedschema}}
+              -Drevision=${{env.CALYCOPIS_OPENAPI_SPRING_VERSION}} \
+              -Dcalycopis.schema.file=/tmp/${{env.CALYCOPIS_OPENAPI_SCHEMA_FILE}}
 
       - name: Upload the Java JAR as a GitHub artifact
         uses: actions/upload-artifact@v7
         with:
           name: 'calycopis-openapi-java-client'
-          path: 'codegen/java/client/target/calycopis-openapi-client-${{env.javaversion}}.jar'
+          path: 'codegen/java/client/target/calycopis-openapi-client-${{env.CALYCOPIS_OPENAPI_SPRING_VERSION}}.jar'
 
       - name: Install our Maven settings
         run: |
@@ -303,8 +327,8 @@ jobs:
             --batch-mode \
             deploy \
               -Puksrc-profile \
-              -Drevision=${{env.javaversion}} \
-              -Dcalycopis.schema.file=/tmp/${{env.combinedschema}}
+              -Drevision=${{env.CALYCOPIS_OPENAPI_SPRING_VERSION}} \
+              -Dcalycopis.schema.file=/tmp/${{env.CALYCOPIS_OPENAPI_SCHEMA_FILE}}
         env:
           UKSRC_REPO_USERNAME: ${{ secrets.UKSRC_REPO_USERNAME }}
           UKSRC_REPO_PASSWORD: ${{ secrets.UKSRC_REPO_PASSWORD }}
@@ -320,8 +344,8 @@ jobs:
             --batch-mode \
             deploy \
               -Pivoa-profile \
-              -Drevision=${{env.javaversion}} \
-              -Dcalycopis.schema.file=/tmp/${{env.combinedschema}}
+              -Drevision=${{env.CALYCOPIS_OPENAPI_SPRING_VERSION}} \
+              -Dcalycopis.schema.file=/tmp/${{env.CALYCOPIS_OPENAPI_SCHEMA_FILE}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -356,6 +380,14 @@ jobs:
             bin/versions.sh config.yaml
         shell: bash
 
+      - name: Check the build versions
+        run: |
+            echo "CALYCOPIS_OPENAPI_SCHEMA_VERSION [${{env.CALYCOPIS_OPENAPI_SCHEMA_VERSION}}]"
+            echo "CALYCOPIS_OPENAPI_SCHEMA_PATH [${{env.CALYCOPIS_OPENAPI_SCHEMA_PATH}}]"
+            echo "CALYCOPIS_OPENAPI_SPRING_VERSION [${{env.CALYCOPIS_OPENAPI_SPRING_VERSION}}]"
+            echo "CALYCOPIS_OPENAPI_PYTHON_VERSION [${{env.CALYCOPIS_OPENAPI_PYTHON_VERSION}}]"
+            echo "CALYCOPIS_OPENAPI_SCHEMA_FILE [${{env.CALYCOPIS_OPENAPI_SCHEMA_FILE}}]"
+
       - name: Check the contents of GITHUB_ENV.
         run: |
           cat "${GITHUB_ENV}"
@@ -382,14 +414,14 @@ jobs:
           ./mvnw \
             --batch-mode \
             clean install \
-              -Drevision=${{env.javaversion}} \
-              -Dcalycopis.schema.file=/tmp/${{env.combinedschema}}
+              -Drevision=${{env.CALYCOPIS_OPENAPI_SPRING_VERSION}} \
+              -Dcalycopis.schema.file=/tmp/${{env.CALYCOPIS_OPENAPI_SCHEMA_FILE}}
 
       - name: Upload the Java JAR as a GitHub artifact
         uses: actions/upload-artifact@v7
         with:
           name: 'calycopis-openapi-java-spring'
-          path: 'codegen/java/spring/target/calycopis-openapi-spring-${{env.javaversion}}.jar'
+          path: 'codegen/java/spring/target/calycopis-openapi-spring-${{env.CALYCOPIS_OPENAPI_SPRING_VERSION}}.jar'
 
       - name: Install our Maven settings
         run: |
@@ -422,8 +454,8 @@ jobs:
             --batch-mode \
             deploy \
               -Puksrc-profile \
-              -Drevision=${{env.javaversion}} \
-              -Dcalycopis.schema.file=/tmp/${{env.combinedschema}}
+              -Drevision=${{env.CALYCOPIS_OPENAPI_SPRING_VERSION}} \
+              -Dcalycopis.schema.file=/tmp/${{env.CALYCOPIS_OPENAPI_SCHEMA_FILE}}
         env:
           UKSRC_REPO_USERNAME: ${{ secrets.UKSRC_REPO_USERNAME }}
           UKSRC_REPO_PASSWORD: ${{ secrets.UKSRC_REPO_PASSWORD }}
@@ -439,8 +471,8 @@ jobs:
             --batch-mode \
             deploy \
               -Pivoa-profile \
-              -Drevision=${{env.javaversion}} \
-              -Dcalycopis.schema.file=/tmp/${{env.combinedschema}}
+              -Drevision=${{env.CALYCOPIS_OPENAPI_SPRING_VERSION}} \
+              -Dcalycopis.schema.file=/tmp/${{env.CALYCOPIS_OPENAPI_SCHEMA_FILE}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

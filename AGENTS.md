@@ -50,7 +50,7 @@ web service (formerly known as Calycopis-schema).
   * `kinds/` - Concrete resource kind schemas, organised by category (compute, costs, data, executable, metrics, storage, volume).
 * `isobeon/` - The schema pre-processor (Python, git submodule). Resolves `$ref` references and produces a single merged YAML file.
 * `bin/` - Shell scripts for building the schema and all generated packages.
-  * `versions.sh` - Reads `config.yaml` and sets the schema/Java/Python version variables.
+  * `versions.sh` - Reads `config.yaml` and exports the `CALYCOPIS_OPENAPI_*` version variables.
   * `buildschema.sh` - Runs the isobeon pre-processor to produce the combined schema.
   * `buildjavaspring.sh` - Builds the Java Spring server package.
   * `buildjavaclient.sh` - Builds the Java client package.
@@ -60,7 +60,7 @@ web service (formerly known as Calycopis-schema).
 * `codegen/python/client/` - Maven project that generates the Python client package.
   * `wrappers/` - Hand-written wrapper layer (`execution_client.py`, `models.py`) providing a higher-level API on top of the generated client.
   * `target/` - Output directory for the generated Python client package (generated, not committed).
-* `config.yaml` - Project configuration: schema path/version, Java build suffix, Python build suffix.
+* `config.yaml` - Project configuration: schema path/version, Java Spring version, Python version.
 * `.github/workflows/` - GitHub Actions workflows for building and publishing the packages.
 * `notes/` - Development session notes.
 * `.cursor/rules/` - Editor rules for AI-assisted development (licence headers, AIMetrics, copyright year).
@@ -96,8 +96,8 @@ pip install -r isobeon/requirements.txt
 
 ### Step 2: Configure the versions
 
-`bin/versions.sh` reads `config.yaml` and exports the schema version, the combined
-schema filename, and the Java/Python package versions:
+`bin/versions.sh` reads `config.yaml` and exports the schema, Java, and Python
+package versions as `CALYCOPIS_OPENAPI_*` environment variables:
 
 ```
 source bin/versions.sh config.yaml
@@ -105,11 +105,11 @@ source bin/versions.sh config.yaml
 
 With the current `config.yaml` this sets:
 
-* `schemashort` - the schema path (`v1.0`)
-* `schemaversion` - the schema version (`1.0.7`)
-* `combinedschema` - the merged schema filename (`execution-broker-1.0.7.yaml`)
-* `javaversion` - the Java package version (`1.0.7-SNAPSHOT`)
-* `pythonversion` - the Python package version (`1.0.7.dev5`)
+* `CALYCOPIS_OPENAPI_SCHEMA_VERSION` - the schema version (`1.0.7`)
+* `CALYCOPIS_OPENAPI_SCHEMA_PATH` - the schema path (`v1.0`)
+* `CALYCOPIS_OPENAPI_SCHEMA_FILE` - the merged schema filename (`execution-broker-1.0.7.yaml`)
+* `CALYCOPIS_OPENAPI_SPRING_VERSION` - the Java package version (`1.0.7-SNAPSHOT`)
+* `CALYCOPIS_OPENAPI_PYTHON_VERSION` - the Python package version (`1.0.7.dev5`)
 
 When run inside a GitHub Actions job it also writes these values to `GITHUB_ENV`.
 
@@ -228,12 +228,21 @@ bin/buildpythonclient.sh
 pip install codegen/python/client/target/dist/*.whl
 ```
 
-## Schema version
+## Version management
 
-The current schema version is `1.0.7` (defined in `config.yaml`). Derived versions:
+All versions are defined explicitly in `config.yaml`:
 
-* Java packages: `1.0.7-SNAPSHOT`
-* Python package: `1.0.7.dev5`
+* `openapi.schema.version` - the OpenAPI schema version (currently `1.0.7`).
+* `openapi.spring.version` - the Java Spring and Java client package version (currently `1.0.7-SNAPSHOT`).
+* `openapi.python.version` - the Python client package version (currently `1.0.7.dev5`).
+
+`bin/versions.sh config.yaml` reads the file and exports the corresponding
+environment variables (`CALYCOPIS_OPENAPI_SCHEMA_VERSION`,
+`CALYCOPIS_OPENAPI_SPRING_VERSION`, `CALYCOPIS_OPENAPI_PYTHON_VERSION`), plus the
+schema path and combined schema filename (`CALYCOPIS_OPENAPI_SCHEMA_PATH`,
+`CALYCOPIS_OPENAPI_SCHEMA_FILE`). The build scripts take their versions from these
+variables, so `bin/versions.sh` must be run before any build. When run inside a
+GitHub Actions job it also writes the values to `GITHUB_ENV`.
 
 The version is applied to:
 

@@ -31,8 +31,8 @@ source "${basepath}/bin/versions.sh" "${basepath}/config.yaml"
 # Build the Java Spring Maven project.
 pushd "${basepath:?}/codegen/java/spring/"
     ./mvnw \
-        -Drevision=${javaversion:?} \
-        -Dcalycopis.schema.file=/tmp/${combinedschema:?} \
+        -Drevision=${CALYCOPIS_OPENAPI_SPRING_VERSION:?} \
+        -Dcalycopis.schema.file=/tmp/${CALYCOPIS_OPENAPI_SCHEMA_FILE:?} \
         clean install
 popd
 
