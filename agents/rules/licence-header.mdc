@@ -1,0 +1,222 @@
+---
+description: Add the licence header to all new source files in the Calycopis-openapi project
+alwaysApply: true
+---
+
+<!-- core:start -->
+When you create a new source file in this project, add the licence header for the file type at the very top of the file, before any code.
+
+Adapt the comment syntax to match the file type as shown below. The templates
+below carry the GPL. Where a project licenses part of its tree under a different
+licence, the project-specific block at the end of this file defines that variant
+and the paths it covers.
+
+The `<year>` and `<copyright holder>` placeholders in these templates are filled
+in from the project-specific block at the end of this file. `<year>` is always
+the year the file is created.
+
+### JavaScript and Node files (`.mjs`, `.js`, `.cjs`) — `//` comments:
+
+```
+// <meta:header>
+//   <meta:licence>
+//     Copyright (c) <year>, <copyright holder>
+//
+//     This information is free software: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+//
+//     This information is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+//
+//     You should have received a copy of the GNU General Public License
+//     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//   </meta:licence>
+// </meta:header>
+//
+// AIMetrics: []
+//
+```
+
+If the file starts with a shebang (`#!/usr/bin/env node`), the shebang stays on
+the first line and the header immediately follows it.
+
+### Python (`.py`), YAML (`.yaml`, `.yml`), shell (`.sh`) and other `#`-commented files:
+
+```
+#
+# <meta:header>
+#   <meta:licence>
+#     Copyright (c) <year>, <copyright holder>
+#
+#     This information is free software: you can redistribute it and/or modify
+#     it under the terms of the GNU General Public License as published by
+#     the Free Software Foundation, either version 3 of the License, or
+#     (at your option) any later version.
+#
+#     This information is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU General Public License for more details.
+#
+#     You should have received a copy of the GNU General Public License
+#     along with this software. If not, see <http://www.gnu.org/licenses/>.
+#   </meta:licence>
+# </meta:header>
+#
+# AIMetrics: []
+#
+```
+
+### Java (`.java`) and other C-style `/* */` files:
+
+```
+/*
+ * <meta:header>
+ *   <meta:licence>
+ *     Copyright (C) <year> <copyright holder>.
+ *
+ *     This information is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This information is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this software. If not, see <http://www.gnu.org/licenses/>.
+ *   </meta:licence>
+ * </meta:header>
+ *
+ * AIMetrics: []
+ *
+ */
+```
+
+### Markdown (`.md`) and HTML (`.html`) — `<!-- -->` comments:
+
+```
+<!--
+  <meta:header>
+    <meta:licence>
+      Copyright (c) <year>, <copyright holder>
+
+      This information is free software: you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation, either version 3 of the License, or
+      (at your option) any later version.
+
+      This information is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+
+      You should have received a copy of the GNU General Public License
+      along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    </meta:licence>
+  </meta:header>
+
+  AIMetrics: []
+-->
+```
+
+### XML files (`.xml`):
+
+The `<?xml ... ?>` declaration has to stay the first thing in the document for
+it to be well formed, so the header follows it. The block is marked with a `+`
+on the opening and closing delimiter and a `|` on every line, which is the style
+used by the XML files in this repository:
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<!--+
+    |
+    | <meta:header>
+    |   <meta:licence>
+    |     Copyright (C) <year> <copyright holder>.
+    |
+    |     This information is free software: you can redistribute it and/or modify
+    |     it under the terms of the GNU General Public License as published by
+    |     the Free Software Foundation, either version 3 of the License, or
+    |     (at your option) any later version.
+    |
+    |     This information is distributed in the hope that it will be useful,
+    |     but WITHOUT ANY WARRANTY; without even the implied warranty of
+    |     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    |     GNU General Public License for more details.
+    |
+    |     You should have received a copy of the GNU General Public License
+    |     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    |   </meta:licence>
+    | </meta:header>
+    |
+    | AIMetrics: []
+    |
+    +-->
+```
+
+Rules:
+
+- The copyright year must be the current year at the time the file is created.
+- The `AIMetrics` block starts as `[]` and is populated by the `ai-metrics` rule.
+- The header must be the very first content in the file (before any `package` or
+  `import` statements, or any `"""` docstring) — with three exceptions, each of
+  which must stay first for the file to work: a shebang line, YAML frontmatter,
+  and the `<?xml ... ?>` declaration in an XML file.
+- Do not add a licence header if the file already has a `<meta:licence>` block.
+
+### Exempt files
+
+A licence header asserts copyright over the project's authored work. Files that
+are not authored work, or that a tool owns, carry no header:
+
+- **Dotfiles** — any file whose name begins with `.`, at any level. For example
+  `.gitignore`, `.gitattributes`, `.editorconfig`, `.env`, `.dockerignore`.
+- **Lockfiles and machine-generated files** — for example `package-lock.json` or
+  `pnpm-lock.yaml`, which are regenerated by their tool rather than written.
+- **`agents/rules/*.mdc`** — rule definitions, which start with YAML frontmatter
+  that has to stay the first content in the file.
+
+Hand-authored configuration is **not** exempt: YAML, JSON, XML, Dockerfiles and
+shell scripts are project source and get a header, using the matching template
+above. A workflow file under `.github/workflows/` is authored work and gets one
+too — it is configuration with a `#` template, not a dotfile.
+<!-- core:end -->
+
+<!-- local:start -->
+The copyright holder for this project is the **University of Manchester**.
+
+This project uses two licences. The templates above carry only the first; the
+header structure, the comment syntax, the `AIMetrics` block and the placement
+rules are the same for both, and only the licence block changes.
+
+- **GPL** — the default, for source code: `codegen/`, `agents/`, and any new
+  code file. Use the templates above, with `<copyright holder>` rendering as
+  `University of Manchester`:
+
+      Copyright (C) 2026 University of Manchester.
+
+- **CC-BY-SA 4.0** — for the schema and the material around it, because an
+  upstream project requires it: `schema/`, `bin/`, `.github/workflows/`, and the
+  repository root files. The licence block is:
+
+      Copyright (c) 2026, University of Manchester (http://www.manchester.ac.uk/)
+
+      This work is made available under the Creative Commons
+      Attribution-ShareAlike 4.0 International licence.
+
+      For details of the licence terms see:
+      https://creativecommons.org/licenses/by-sa/4.0/
+
+Existing files carry several forms of the holder — `Manchester`, `Manchester
+University` and `University of Manchester` — and the CC-BY-SA files use
+`Manchester University`. New files should use `University of Manchester`.
+Normalising the existing ones is separate work, so do not rename the holder as a
+side effect of another change.
+<!-- local:end -->
