@@ -1,7 +1,7 @@
 #
 # <meta:header>
 #   <meta:licence>
-#     Copyright (c) 2025, Manchester University (http://www.manchester.ac.uk/)
+#     Copyright (c) 2026, Manchester University (http://www.manchester.ac.uk/)
 #
 #     This work is made available under the Creative Commons
 #     Attribution-ShareAlike 4.0 International licence.
@@ -16,6 +16,16 @@
 #     "name": "ChatGPT",
 #     "contribution": {
 #       "value": 5,
+#       "units": "%"
+#       }
+#     },
+#     {
+#     "timestamp": "2026-10-10T10:06:15",
+#     "name": "@deepseek-ai/dsh",
+#     "version": "0.2.0-rc.2",
+#     "model": "deepseek-flash",
+#     "contribution": {
+#       "value": 20,
 #       "units": "%"
 #       }
 #     }
@@ -73,6 +83,11 @@ components:
             environment:
               description: >-
                 A name => value map of environment variables to pass to the container.
+              $ref: '../../utils.yaml#/components/schemas/NameValueMap'
+            labels:
+              description: >-
+                A name => value map of labels to apply to the container.
+                Label names beginning with `calycopis-broker-` are reserved for the service.
               $ref: '../../utils.yaml#/components/schemas/NameValueMap'
             network:
               description: >-
