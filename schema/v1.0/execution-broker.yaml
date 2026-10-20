@@ -1,7 +1,7 @@
 #
 # <meta:header>
 #   <meta:licence>
-#     Copyright (c) 2024, Manchester University (http://www.manchester.ac.uk/)
+#     Copyright (c) 2026, Manchester University (http://www.manchester.ac.uk/)
 #
 #     This work is made available under the Creative Commons
 #     Attribution-ShareAlike 4.0 International licence.
@@ -16,6 +16,16 @@
 #     "name": "ChatGPT",
 #     "contribution": {
 #       "value": 5,
+#       "units": "%"
+#       }
+#     },
+#     {
+#     "timestamp": "2026-10-20T11:57:26",
+#     "name": "@deepseek-ai/dsh",
+#     "version": "0.2.0-rc.2",
+#     "model": "deepseek-flash",
+#     "contribution": {
+#       "value": 30,
 #       "units": "%"
 #       }
 #     }
@@ -55,7 +65,6 @@ paths:
             schema:
               $ref: './components.yaml#/components/schemas/ExecutionRequest'
         required: true
-      # TODO Errors return error codes and ErrorResponse.
       responses:
         "303":
           description: >-
@@ -79,6 +88,21 @@ paths:
             application/yaml:
               schema:
                 $ref: './components.yaml#/components/schemas/OfferSetResponse'
+        "400":
+          description: >-
+            400 Bad Request - The request body is malformed or does not match
+            the schema.
+          content:
+            application/problem+json:
+              schema:
+                $ref: './components.yaml#/components/schemas/ProblemDetails'
+        default:
+          description: >-
+            An RFC 9457 problem details response for any other error.
+          content:
+            application/problem+json:
+              schema:
+                $ref: './components.yaml#/components/schemas/ProblemDetails'
 
   /direct:
     post:
@@ -123,8 +147,12 @@ paths:
                 $ref: './components.yaml#/components/schemas/AbstractExecutionSession'
         "400":
           description: >-
-            400 Bad Request - The request was rejected, returning a FailedExecutionResponse
-            with details of why the request was rejected.
+            400 Bad Request - The request was rejected, returning a
+            FailedExecutionResponse with details of why the request was
+            rejected. By default the failed execution is returned as an
+            AbstractExecutionSession. When the broker's RFC 9457 evaluation
+            flag is enabled, the response is an RFC 9457 problem details
+            document instead.
           content:
             application/json:
               schema:
@@ -135,6 +163,16 @@ paths:
             application/yaml:
               schema:
                 $ref: './components.yaml#/components/schemas/AbstractExecutionSession'
+            application/problem+json:
+              schema:
+                $ref: './components.yaml#/components/schemas/ProblemDetails'
+        default:
+          description: >-
+            An RFC 9457 problem details response for any other error.
+          content:
+            application/problem+json:
+              schema:
+                $ref: './components.yaml#/components/schemas/ProblemDetails'
 
   /offersets/{uuid}:
     get:
@@ -149,7 +187,6 @@ paths:
             type: string
             format: uuid
           style: simple
-      # TODO Errors return error codes and ErrorResponse.
       responses:
         "200":
           description: >-
@@ -164,6 +201,20 @@ paths:
             application/yaml:
               schema:
                 $ref: './components.yaml#/components/schemas/OfferSetResponse'
+        "404":
+          description: >-
+            404 Not Found - No offer set was found for this UUID.
+          content:
+            application/problem+json:
+              schema:
+                $ref: './components.yaml#/components/schemas/ProblemDetails'
+        default:
+          description: >-
+            An RFC 9457 problem details response for any other error.
+          content:
+            application/problem+json:
+              schema:
+                $ref: './components.yaml#/components/schemas/ProblemDetails'
 
   /sessions/{uuid}:
     get:
@@ -178,7 +229,6 @@ paths:
             type: string
             format: uuid
           style: simple
-      # TODO Errors return error codes and ErrorResponse.
       responses:
         "200":
           description: >-
@@ -193,6 +243,20 @@ paths:
             application/yaml:
               schema:
                 $ref: './components.yaml#/components/schemas/AbstractExecutionSession'
+        "404":
+          description: >-
+            404 Not Found - No execution session was found for this UUID.
+          content:
+            application/problem+json:
+              schema:
+                $ref: './components.yaml#/components/schemas/ProblemDetails'
+        default:
+          description: >-
+            An RFC 9457 problem details response for any other error.
+          content:
+            application/problem+json:
+              schema:
+                $ref: './components.yaml#/components/schemas/ProblemDetails'
 
     post:
       operationId: SessionUpdate
@@ -220,7 +284,6 @@ paths:
           application/yaml:
             schema:
               $ref: './components.yaml#/components/schemas/AbstractUpdate'
-      # TODO Errors return error codes and ErrorResponse.
       responses:
         "200":
           description: >-
@@ -235,6 +298,36 @@ paths:
             application/yaml:
               schema:
                 $ref: './components.yaml#/components/schemas/AbstractExecutionSession'
+        "400":
+          description: >-
+            400 Bad Request - The update request was malformed, or it asked
+            for a change that is not valid for this execution session.
+          content:
+            application/problem+json:
+              schema:
+                $ref: './components.yaml#/components/schemas/ProblemDetails'
+        "403":
+          description: >-
+            403 Forbidden - The authenticated identity is not allowed to
+            update this execution session.
+          content:
+            application/problem+json:
+              schema:
+                $ref: './components.yaml#/components/schemas/ProblemDetails'
+        "404":
+          description: >-
+            404 Not Found - No execution session was found for this UUID.
+          content:
+            application/problem+json:
+              schema:
+                $ref: './components.yaml#/components/schemas/ProblemDetails'
+        default:
+          description: >-
+            An RFC 9457 problem details response for any other error.
+          content:
+            application/problem+json:
+              schema:
+                $ref: './components.yaml#/components/schemas/ProblemDetails'
 
 
 
